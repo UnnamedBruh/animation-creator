@@ -38,6 +38,8 @@ const toolUI = {
 	elements: ["circle", "rectangle"]
 }
 
+const toolIco = {circle: "circle", rectangle: "square"};
+
 class Child {
 	constructor(type, properties) {
 		this.type = type;
@@ -99,7 +101,7 @@ toolUI.elements.forEach(id => {
 		tool = id;
 		for (const x of toolUI.elements) {
 			toolUI[x + "E"] = tool === x;
-			toolUI[x].src = "icons/" + x + (tool === x ? "-white.png" : "-black.png");
+			toolUI[x].src = "icons/" + toolIco[x] + (tool === x ? "-white.png" : "-black.png");
 		}
 	}
 });
