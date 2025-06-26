@@ -37,15 +37,33 @@ function render() {
 		const props = child.properties;
 		switch (child.type) {
 			case typesOfChildren.RECT: {
+				context.lineWidth = props.strokeWidth;
+				if (!props.isStrokeTop && props.strokeWidth !== 0) {
+					context.strokeStyle = props.strokeColor;
+					context.strokeRect(props.x, props.y, props.width, props.height);
+				}
 				context.fillStyle = props.color;
 				context.fillRect(props.x, props.y, props.width, props.height);
+				if (props.isStrokeTop && props.strokeWidth !== 0) {
+					context.strokeStyle = props.strokeColor;
+					context.strokeRect(props.x, props.y, props.width, props.height);
+				}
 				break;
 			}
 			case typesOfChildren.CIRC: {
-				context.fillStyle = props.color;
+				context.lineWidth = props.strokeWidth;
 				context.beginPath();
+				context.fillStyle = props.color;
 				context.arc(props.x, props.y, props.radius, 0, Math.PI * 2);
+				if (props.strokeWidth !== 0 && !props.isStrokeTop) {
+					context.strokeStyle = props.strokeColor;
+					context.stroke();
+				}
 				context.fill();
+				if (props.strokeWidth !== 0 && props.isStrokeTop) {
+					context.strokeStyle = props.strokeColor;
+					context.stroke();
+				}
 				break;
 			}
 		}
@@ -60,10 +78,10 @@ canvas.onmousedown = function(event) {
 	isDown = true;
 	switch (tool) {
 		case "rectangle":
-			currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+			currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
 			break;
 		case "circle":
-			currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+			currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
 			break;
 	}
 }
