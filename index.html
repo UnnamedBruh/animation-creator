@@ -49,7 +49,8 @@ class Child {
 
 const typesOfChildren = {
 	RECT: 0,
-	CIRC: 1
+	CIRC: 1,
+	TRI: 2
 }
 
 // ------------------------ FUNCTIONALITY --------------------------
@@ -91,6 +92,25 @@ function render() {
 				}
 				break;
 			}
+			case typesOfChildren.TRI: {
+				context.lineWidth = props.strokeWidth;
+				context.fillStyle = props.color;
+				context.beginPath();
+				context.moveTo(props.x, props.y + props.height);
+				context.lineTo(props.x + props.width * props.topX, props.y);
+				context.lineTo(props.x + props.width, props.y + props.height);
+				context.closePath();
+				if (!props.isStrokeTop && props.strokeWidth !== 0) {
+					context.strokeStyle = props.strokeColor;
+					context.stroke();
+				}
+				context.fill();
+				if (props.isStrokeTop && props.strokeWidth !== 0) {
+					context.strokeStyle = props.strokeColor;
+					context.stroke();
+				}
+				break;
+			}
 		}
 	}
 }
@@ -119,6 +139,9 @@ canvas.onmousedown = function(event) {
 		case "circle":
 			currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
 			break;
+		case "triangle":
+			currentSelection = (scene[scene.length] = new Child(typesOfChildren.TRI, {x: startX, y: startY, topX: 0.5, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
+			break;
 	}
 }
 
@@ -129,6 +152,7 @@ canvas.onmousemove = function(event) {
 	midY = event.clientY - bounds.y;
 	switch (tool) {
 		case "rectangle":
+		case "triangle":
 			currentSelection.properties.width = midX - startX;
 			currentSelection.properties.height = midY - startY;
 			break;
