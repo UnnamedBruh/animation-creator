@@ -1,0 +1,36 @@
+<html lang="en">
+	<head>
+		<title>Animation Creator</title>
+	</head>
+	<body>
+		<center>
+			<canvas id="canv" style="border: 1px solid" width="600" height="400"></canvas><br>
+			<button id="add" style="height: 21px">+</button> <input id="background" type="color" style="height: 21px" value="#ffffff">
+		</center>
+		<script>
+const back = document.getElementById("background"), canvas = document.getElementById("canv"), add = document.getElementById("add");
+back.oninput = function() {
+	canvas.style.backgroundColor = back.value;
+};
+
+const animation = [[]];
+let tool = "rectangle", startX = 0, startY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null;
+
+class Child {
+	constructor(type, properties) {
+		this.type = type;
+		this.properties = properties;
+	}
+}
+
+function shadowShape()
+
+canvas.onmousedown = function(event) {
+	const bounds = canvas.getBoundingClientRect();
+	startX = event.clientX - bounds.x;
+	startY = event.clientY - bounds.y;
+	isDown = true;
+}
+		</script>
+	</body>
+</html>
