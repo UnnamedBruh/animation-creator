@@ -25,7 +25,8 @@ class Child {
 }
 
 const typesOfChildren = {
-	RECT: 0
+	RECT: 0,
+	CIRC: 1
 }
 
 function render() {
@@ -40,6 +41,13 @@ function render() {
 				context.fillRect(props.x, props.y, props.width, props.height);
 				break;
 			}
+			case typesOfChildren.CIRC: {
+				context.fillStyle = props.color;
+				context.beginPath();
+				context.fillRect(props.x, props.y, props.radius, 0, Math.PI * 2);
+				context.stroke();
+				break;
+			}
 		}
 	}
 }
@@ -50,7 +58,14 @@ canvas.onmousedown = function(event) {
 	startX = event.clientX - bounds.x;
 	startY = event.clientY - bounds.y;
 	isDown = true;
-	currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+	switch (tool) {
+		case "rectangle":
+			currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+			break;
+		case "circle":
+			currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+			break;
+	}
 }
 
 canvas.onmousemove = function(event) {
@@ -58,8 +73,15 @@ canvas.onmousemove = function(event) {
 	const bounds = canvas.getBoundingClientRect();
 	midX = event.clientX - bounds.x;
 	midY = event.clientY - bounds.y;
-	currentSelection.properties.width = midX - startX;
-	currentSelection.properties.height = midY - startY;
+	switch (tool) {
+		case "rectangle":
+			currentSelection.properties.width = midX - startX;
+			currentSelection.properties.height = midY - startY;
+			break;
+		case "circle":
+			currentSelection.properties.radius = Math.hypot(midX - startX, midY - startY);
+			break;
+	}
 	render();
 }
 
@@ -68,8 +90,15 @@ canvas.onmouseup = function(event) {
 	endX = event.clientX - bounds.x;
 	endY = event.clientY - bounds.y;
 	isDown = false;
-	currentSelection.properties.width = endX - startX;
-	currentSelection.properties.height = endY - startY;
+	switch (tool) {
+		case "rectangle":
+			currentSelection.properties.width = endX - startX;
+			currentSelection.properties.height = endY - startY;
+			break;
+		case "circle":
+			currentSelection.properties.radius = Math.hypot(endX - startX, endY - startY);
+			break;
+	}
 	currentSelection.properties.color = "rgba(0, 0, 0, 1)";
 	render();
 }
