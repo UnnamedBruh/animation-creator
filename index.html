@@ -62,6 +62,16 @@ canvas.onmousemove = function(event) {
 	currentSelection.properties.height = midY - startY;
 }
 
+canvas.onmouseup = function(event) {
+	const bounds = canvas.getBoundingClientRect();
+	endX = event.clientX - bounds.x;
+	endY = event.clientY - bounds.y;
+	isDown = false;
+	currentSelection.properties.width = endX - startX;
+	currentSelection.properties.height = endY - startY;
+	currentSelection.properties.color = "rgba(0, 0, 0, 1)";
+}
+
 setInterval(render, 1000 / 30);
 		</script>
 	</body>
