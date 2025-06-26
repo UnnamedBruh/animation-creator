@@ -3,18 +3,21 @@
 	<head>
 		<title>Animation Creator</title>
 		<style>
+:root {
+	--offset: min(16px, calc(50vw - 326px));
+}
 .firstRow {
-	position: absolute; left: min(16px, calc(50vw - 326px)); top: 16px; width: 16px; height: 16px;
+	position: absolute; left: var(--offset); top: 16px; width: 16px; height: 16px;
 }
 		</style>
 	</head>
 	<body>
-		<div style="position: absolute; left: 0px; top: 0px; width: min(200px, calc(50vw - 310px)); height: 100%">
-			<button class="firstRow" id="circle"></button>
-			<img class="firstRow" id="circleico" src="icons/circle-black.png">
+		<div style="position: absolute; left: 0px; top: 0px; width: min(200px, calc(50vw - 310px)); height: 100%; border: 1px rgb(0, 0, 0) solid; background-color: rgb(100, 100, 100)">
+			<img class="firstRow" id="rectangle" src="icons/square-black.png">
+			<img class="firstRow" id="circle" style="left: calc(var(--offset) + 20px)" src="icons/circle-black.png">
 		</div>
 		<div style="position: absolute; left: calc(50vw - 300px); top: 0px;">
-			<canvas id="canv" style="border: 1px solid" width="600" height="400"></canvas><br>
+			<canvas id="canv" style="border: 1px rgb(0, 0, 0) solid" width="600" height="400"></canvas><br>
 			<input id="background" type="color" style="height: 21px" value="#ffffff">
 		</div>
 		<script>
@@ -26,6 +29,14 @@ back.oninput = function() {
 
 const animation = [[]];
 let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null, currentScene = 0, canvasWidth = 600, canvasHeight = 400;
+
+const toolUI = {
+	circle: document.getElementById("circle"),
+	circleE: false,
+	rectangle: document.getElementById("rectangle"),
+	rectangleE: false,
+	elements: ["circle", "rectangle"]
+}
 
 class Child {
 	constructor(type, properties) {
