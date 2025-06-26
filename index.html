@@ -3,10 +3,10 @@
 		<title>Animation Creator</title>
 	</head>
 	<body>
-		<center>
+		<div style="position: absolute; left: calc(50vw - 300px); top: 0px;">
 			<canvas id="canv" style="border: 1px solid" width="600" height="400"></canvas><br>
-			<button id="add" style="height: 21px">+</button> <input id="background" type="color" style="height: 21px" value="#ffffff">
-		</center>
+			<input id="background" type="color" style="height: 21px" value="#ffffff">
+		</div>
 		<script>
 const back = document.getElementById("background"), canvas = document.getElementById("canv"), add = document.getElementById("add");
 const context = canvas.getContext("2d");
