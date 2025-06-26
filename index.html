@@ -1,8 +1,18 @@
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>Animation Creator</title>
+		<style>
+.firstRow {
+	position: absolute; left: min(16px, calc(50vw - 326px)); top: 16px; width: 16px; height: 16px;
+}
+		</style>
 	</head>
 	<body>
+		<div style="position: absolute; left: 0px; top: 0px; width: min(200px, calc(50vw - 310px)); height: 100%">
+			<button class="firstRow" id="circle"></button>
+			<img class="firstRow" id="circleico" src="icons/circle-black.png">
+		</div>
 		<div style="position: absolute; left: calc(50vw - 300px); top: 0px;">
 			<canvas id="canv" style="border: 1px solid" width="600" height="400"></canvas><br>
 			<input id="background" type="color" style="height: 21px" value="#ffffff">
