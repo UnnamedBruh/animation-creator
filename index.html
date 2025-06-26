@@ -13,7 +13,7 @@
 	</head>
 	<body>
 		<div style="position: absolute; left: 0px; top: 0px; width: min(200px, calc(50vw - 310px)); height: 100%; border: 1px rgb(0, 0, 0) solid; background-color: rgb(100, 100, 100)">
-			<img class="firstRow" id="rectangle" src="icons/square-black.png">
+			<img class="firstRow" id="rectangle" src="icons/square-white.png">
 			<img class="firstRow" id="circle" style="left: calc(var(--offset) + 20px)" src="icons/circle-black.png">
 		</div>
 		<div style="position: absolute; left: calc(50vw - 300px); top: 0px;">
@@ -32,7 +32,7 @@ let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, en
 
 const toolUI = {
 	circle: document.getElementById("circle"),
-	circleE: false,
+	circleE: true,
 	rectangle: document.getElementById("rectangle"),
 	rectangleE: false,
 	elements: ["circle", "rectangle"]
@@ -49,6 +49,8 @@ const typesOfChildren = {
 	RECT: 0,
 	CIRC: 1
 }
+
+// ------------------------ FUNCTIONALITY --------------------------
 
 function render() {
 	context.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -90,6 +92,17 @@ function render() {
 		}
 	}
 }
+
+toolUI.elements.forEach(id => {
+	const el = toolUI[id];
+	el.onclick = () => {
+		tool = id;
+		for (const x of toolUI.elements) {
+			toolUI[x + "E"] = tool === id;
+			toolUI[x].src = "icons/" + tool + (tool === id ? "-white.png" : "-black.png");
+		}
+	}
+});
 
 canvas.onmousedown = function(event) {
 	const bounds = canvas.getBoundingClientRect();
