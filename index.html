@@ -15,6 +15,7 @@
 		<div style="position: absolute; left: 0px; top: 0px; width: min(200px, calc(50vw - 310px)); height: 100%; border: 1px rgb(0, 0, 0) solid; background-color: rgb(100, 100, 100)">
 			<img class="firstRow" id="rectangle" src="icons/square-white.png">
 			<img class="firstRow" id="circle" style="left: calc(var(--offset) + 20px)" src="icons/circle-black.png">
+			<img class="firstRow" id="triangle" style="left: calc(var(--offset) + 40px)" src="icons/triangle-black.png">
 		</div>
 		<div style="position: absolute; left: calc(50vw - 300px); top: 0px;">
 			<canvas id="canv" style="border: 1px rgb(0, 0, 0) solid" width="600" height="400"></canvas><br>
@@ -32,13 +33,12 @@ let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, en
 
 const toolUI = {
 	circle: document.getElementById("circle"),
-	circleE: true,
 	rectangle: document.getElementById("rectangle"),
-	rectangleE: false,
-	elements: ["circle", "rectangle"]
+	triangle: document.getElementById("triangle"),
+	elements: ["circle", "rectangle", "triangle"]
 }
 
-const toolIco = {circle: "circle", rectangle: "square"};
+const toolIco = {circle: "circle", rectangle: "square", triangle: "triangle"};
 
 class Child {
 	constructor(type, properties) {
@@ -120,7 +120,7 @@ toolUI.elements.forEach(id => {
 	el.onclick = () => {
 		tool = id;
 		for (const x of toolUI.elements) {
-			toolUI[x + "E"] = tool === x;
+			//toolUI[x + "E"] = tool === x;
 			toolUI[x].src = "icons/" + toolIco[x] + (tool === x ? "-white.png" : "-black.png");
 		}
 	}
