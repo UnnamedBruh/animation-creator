@@ -98,8 +98,8 @@ toolUI.elements.forEach(id => {
 	el.onclick = () => {
 		tool = id;
 		for (const x of toolUI.elements) {
-			toolUI[x + "E"] = tool === id;
-			toolUI[x].src = "icons/" + tool + (tool === id ? "-white.png" : "-black.png");
+			toolUI[x + "E"] = tool === x;
+			toolUI[x].src = "icons/" + x + (tool === x ? "-white.png" : "-black.png");
 		}
 	}
 });
