@@ -9,12 +9,13 @@
 		</center>
 		<script>
 const back = document.getElementById("background"), canvas = document.getElementById("canv"), add = document.getElementById("add");
+const context = canvas.getContext("2d");
 back.oninput = function() {
 	canvas.style.backgroundColor = back.value;
 };
 
 const animation = [[]];
-let tool = "rectangle", startX = 0, startY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null;
+let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null, currentScene = 0, canvasWidth = 600, canvasHeight = 400;
 
 class Child {
 	constructor(type, properties) {
@@ -23,13 +24,42 @@ class Child {
 	}
 }
 
-function shadowShape()
+const typesOfChildren = {
+	RECT: 0
+}
+
+function render() {
+	context.clearRect(0, 0, canvasWidth, canvasHeight);
+	const scene = animation[currentScene].sort((a, b) => a.properties.layer - b.properties.layer);
+	if (scene.length === 0) return;
+	for (const child of scene) {
+		const props = child.properties;
+		switch (child.type) {
+			case typesOfChildren.RECT: {
+				context.fillStyle = props.color;
+				context.fillRect(props.x, props.y, props.width, props.height);
+				break;
+			}
+		}
+	}
+}
 
 canvas.onmousedown = function(event) {
 	const bounds = canvas.getBoundingClientRect();
+	const scene = animation[currentScene];
 	startX = event.clientX - bounds.x;
 	startY = event.clientY - bounds.y;
 	isDown = true;
+	currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", layer: scene.length}));
+}
+
+canvas.onmousemove = function(event) {
+	if (!isDown) return;
+	const bounds = canvas.getBoundingClientRect();
+	midX = event.clientX - bounds.x;
+	midY = event.clientY - bounds.y;
+	currentSelection.properties.width = midX - startX;
+	currentSelection.properties.height = midY - startY;
 }
 		</script>
 	</body>
