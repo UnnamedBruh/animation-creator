@@ -29,7 +29,7 @@ back.oninput = function() {
 };
 
 const animation = [[]];
-let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null, currentScene = 0, canvasWidth = 600, canvasHeight = 400;
+let tool = "rectangle", startX = 0, startY = 0, midX = 0, midY = 0, endX = 0, endY = 0, isDown = false, currentSelection = null, currentScene = 0, canvasWidth = 600, canvasHeight = 400, subTool = 0;
 
 const toolUI = {
 	circle: document.getElementById("circle"),
@@ -132,33 +132,43 @@ canvas.onmousedown = function(event) {
 	startX = event.clientX - bounds.x;
 	startY = event.clientY - bounds.y;
 	isDown = true;
-	switch (tool) {
-		case "rectangle":
-			currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
+	switch (subTool) {
+		case 0: {
+			switch (tool) {
+				case "rectangle":
+					currentSelection = (scene[scene.length] = new Child(typesOfChildren.RECT, {x: startX, y: startY, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
+					break;
+				case "circle":
+					currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
+					break;
+				case "triangle":
+					currentSelection = (scene[scene.length] = new Child(typesOfChildren.TRI, {x: startX, y: startY, topX: 0.5, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
+					break;
+			}
 			break;
-		case "circle":
-			currentSelection = (scene[scene.length] = new Child(typesOfChildren.CIRC, {x: startX, y: startY, radius: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
-			break;
-		case "triangle":
-			currentSelection = (scene[scene.length] = new Child(typesOfChildren.TRI, {x: startX, y: startY, topX: 0.5, width: 0, height: 0, color: "rgba(0, 0, 0, 0.5)", strokeColor: "rgba(0, 0, 0, 0.5)", strokeWidth: 0, isStrokeTop: false, layer: scene.length}));
-			break;
+		}
 	}
 }
 
 canvas.onmousemove = function(event) {
-	if (!isDown) return;
+	if (!isDown && subTool === 0) return;
 	const bounds = canvas.getBoundingClientRect();
 	midX = event.clientX - bounds.x;
 	midY = event.clientY - bounds.y;
-	switch (tool) {
-		case "rectangle":
-		case "triangle":
-			currentSelection.properties.width = midX - startX;
-			currentSelection.properties.height = midY - startY;
+	switch (subTool) {
+		case 0: {
+			switch (tool) {
+				case "rectangle":
+				case "triangle":
+					currentSelection.properties.width = midX - startX;
+					currentSelection.properties.height = midY - startY;
+					break;
+				case "circle":
+					currentSelection.properties.radius = Math.hypot(midX - startX, midY - startY);
+					break;
+			}
 			break;
-		case "circle":
-			currentSelection.properties.radius = Math.hypot(midX - startX, midY - startY);
-			break;
+		}
 	}
 	render();
 }
@@ -168,16 +178,21 @@ canvas.onmouseup = function(event) {
 	endX = event.clientX - bounds.x;
 	endY = event.clientY - bounds.y;
 	isDown = false;
-	switch (tool) {
-		case "rectangle":
-			currentSelection.properties.width = endX - startX;
-			currentSelection.properties.height = endY - startY;
+	switch (subTool) {
+		case 0: {
+			switch (tool) {
+				case "rectangle":
+					currentSelection.properties.width = endX - startX;
+					currentSelection.properties.height = endY - startY;
+					break;
+				case "circle":
+					currentSelection.properties.radius = Math.hypot(endX - startX, endY - startY);
+					break;
+			}
+			currentSelection.properties.color = "rgba(0, 0, 0, 1)";
 			break;
-		case "circle":
-			currentSelection.properties.radius = Math.hypot(endX - startX, endY - startY);
-			break;
+		}
 	}
-	currentSelection.properties.color = "rgba(0, 0, 0, 1)";
 	render();
 }
 		</script>
